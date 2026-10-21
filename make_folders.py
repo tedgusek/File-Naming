@@ -23,7 +23,7 @@ import os
 import re
 import sys
 
-DEFAULT_DEST = "/Volumes/07_TedGusek/2026_1105_Wakefern"
+DEFAULT_DEST = os.path.join(os.path.dirname(os.path.abspath(__file__)), "destination.txt")
 
 # Zero-based column positions: A=0, B=1, C=2, K=10, L=11, N=13, O=14
 COL_A, COL_B, COL_C = 0, 1, 2
