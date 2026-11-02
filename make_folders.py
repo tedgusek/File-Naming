@@ -2,7 +2,7 @@
 """
 Create numbered folders from a CSV export of the spreadsheet.
 
-Row 1 is a header and is skipped. Then, for each store row, one folder is
+Rows 1 and 2 are headers and are skipped. Then, for each store row, one folder is
 made for every filled name in columns F, G, H and I (shirt sizes removed):
 
     001_<A>_<B>_<C>_<name>
@@ -39,6 +39,8 @@ DEST_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "destinatio
 
 # Zero-based column positions: A=0, B=1, C=2, D=3, F=5, G=6, H=7, I=8
 COL_A, COL_B, COL_C, COL_D = 0, 1, 2, 3
+
+HEADER_ROWS = 2  # rows at the top of the CSV to skip
 NAME_COLS = [5, 6, 7, 8]  # F, G, H, I
 
 ILLEGAL = re.compile(r'[\\/:*?"<>|\x00-\x1f]')
@@ -96,8 +98,9 @@ def build_names(csv_path):
     counter = 1
     with open(csv_path, newline="", encoding="utf-8-sig") as f:
         reader = csv.reader(f)
-        next(reader, None)  # skip header row
-        for line_no, row in enumerate(reader, start=2):
+        for _ in range(HEADER_ROWS):
+            next(reader, None)  # skip header rows
+        for line_no, row in enumerate(reader, start=HEADER_ROWS + 1):
             col_c = cell(row, COL_C)
 
             if PHOTO_ROW.search(col_c):
